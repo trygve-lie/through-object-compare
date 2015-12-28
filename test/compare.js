@@ -67,3 +67,31 @@ tap.test('source stream has objects which exist in the source array - result sho
         t.end();
     }));
 });
+
+
+
+tap.test('source stream has objects that differs from the source array - result should hold changed objects', (t) => {
+    let changed = {
+        uuid : '002',
+        created : 2,
+        updated : 2
+    };
+
+    sourceStream(sourceArray).pipe(compare([sourceArray[0], changed, sourceArray[2]], compareFunction)).pipe(concat((result) => {
+        t.equal(result[0].type, 'changed');
+        t.equal(result[0].data.uuid, '002');
+        t.equal(result[0].data.updated, 20);
+        t.end();
+    }));
+});
+
+
+
+tap.test('source stream is missing objects which exist in the source array - result should hold deleted objects', (t) => {
+    sourceStream([sourceArray[1]]).pipe(compare(sourceArray, compareFunction)).pipe(concat((result) => {
+        t.equal(result[0].type, 'deleted');
+        t.equal(result[0].data['001'].uuid, '001');
+        t.equal(result[0].data['003'].uuid, '003');
+        t.end();
+    }));
+});
