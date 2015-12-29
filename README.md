@@ -119,6 +119,17 @@ This module will not function with older than 4.x versions of node.js.
 
 
 
+## error handling
+
+This module does not handle errors for you, so you must handle errors on 
+whatever streams you pipe into this module. This is a general rule when 
+programming with node.js streams: always handle errors on each and every stream. 
+
+We recommend using [`end-of-stream`](https://npmjs.org/end-of-stream) or [`pump`](https://npmjs.org/pump) 
+for writing error tolerant stream code.
+
+
+
 ## License 
 
 The MIT License (MIT)
