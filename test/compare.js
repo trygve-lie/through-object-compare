@@ -40,6 +40,39 @@ const compareFunction = (objOld, objNew) => {
 
 
 
+tap.test('compare array not provided - result should throw assert error', (t) => {
+    t.throws(() => {
+        sourceStream(sourceArray).pipe(compare(undefined, 'uuid', compareFunction)).pipe(concat((result) => {
+
+        }));
+    }, new Error('"compareObjects" must be provided'));
+    t.end();
+});
+
+
+
+tap.test('identifier not provided - result should throw assert error', (t) => {
+    t.throws(() => {
+        sourceStream(sourceArray).pipe(compare([], undefined, compareFunction)).pipe(concat((result) => {
+
+        }));
+    }, new Error('"identifier" must be provided'));
+    t.end();
+});
+
+
+
+tap.test('compare function not provided - result should throw assert error', (t) => {
+    t.throws(() => {
+        sourceStream(sourceArray).pipe(compare([], 'uuid', undefined)).pipe(concat((result) => {
+
+        }));
+    }, new Error('"compareFunction" must be provided'));
+    t.end();
+});
+
+
+
 tap.test('compare array is empty - result should hold 3 added objects', (t) => {
     sourceStream(sourceArray).pipe(compare([], 'uuid', compareFunction)).pipe(concat((result) => {
         t.similar(result[0], {appended : sourceArray[0]});
