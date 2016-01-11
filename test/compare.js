@@ -84,6 +84,17 @@ tap.test('compare array is empty - result should hold 3 added objects', (t) => {
 
 
 
+tap.test('compare array is empty - result should have null values for "match" on all objects', (t) => {
+    sourceStream(sourceArray).pipe(compare([], 'uuid', compareFunction)).pipe(concat((result) => {
+        t.equal(result[0].match, null);
+        t.equal(result[0].match, null);
+        t.equal(result[0].match, null);
+        t.end();
+    }));
+});
+
+
+
 tap.test('compare array is equal to the source stream - result should hold zero objects', (t) => {
     sourceStream(sourceArray).pipe(compare(sourceArray, 'uuid', compareFunction)).pipe(concat((result) => {
         t.equal(result.length, 0);
@@ -119,11 +130,38 @@ tap.test('source stream has objects that differs from the source array - result 
 
 
 
+tap.test('source stream has objects that differs from the source array - result should have the source object on the "match" attribute', (t) => {
+    let changed = {
+        uuid : '002',
+        created : 2,
+        updated : 2
+    };
+
+    sourceStream(sourceArray).pipe(compare([sourceArray[0], changed, sourceArray[2]], 'uuid', compareFunction)).pipe(concat((result) => {
+        t.equal(result.length, 1);
+        t.equal(result[0].match, changed);
+        t.end();
+    }));
+});
+
+
+
 tap.test('source stream is missing objects which exist in the source array - result should hold deleted objects', (t) => {
     sourceStream([sourceArray[1]]).pipe(compare(sourceArray, 'uuid', compareFunction)).pipe(concat((result) => {
         t.equal(result.length, 2);
         t.similar(result[0], {deleted : sourceArray[0]});
         t.similar(result[1], {deleted : sourceArray[2]});
+        t.end();
+    }));
+});
+
+
+
+tap.test('source stream is missing objects which exist in the source array - result should hold deleted objects on the "match" attribute', (t) => {
+    sourceStream([sourceArray[1]]).pipe(compare(sourceArray, 'uuid', compareFunction)).pipe(concat((result) => {
+        t.equal(result.length, 2);
+        t.similar(result[0], {match : sourceArray[0]});
+        t.similar(result[1], {match : sourceArray[2]});
         t.end();
     }));
 });
