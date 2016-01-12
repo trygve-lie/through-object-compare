@@ -85,7 +85,7 @@ This module have the following API:
 Creates an instance for comparing.
 
 ```js
-const const throughObjectCompare = require('through-object-compare');
+const throughObjectCompare = require('through-object-compare');
 let compare = throughObjectCompare(compareArray, compareFunction);
 ```
 
@@ -107,6 +107,60 @@ stream.
 ```js
 let compare = throughObjectCompare(compareArray, (objOld, objNew) => {
     return objOld.updated === objNew.updated && objOld.created === objNew.created;
+});
+```
+
+
+
+## Events
+
+through-object-compare expose expose the following events. 
+
+
+### append
+
+Emitted when a object occur in the stream which are not in the array of objects
+compared against.
+
+```js
+compare.on('append', function (obj) {
+    console.log('appended', obj);
+});
+```
+
+
+### change
+
+Emitted when a object occur in the stream which also are in the array of objects
+compared against but they differ from each other.
+
+```js
+compare.on('change', function (streamObj, compareObj) {
+    console.log('changed', streamObj, compareObj);
+});
+```
+
+
+### delete
+
+Emitted on objects which are in the array of objects compared against but not in
+the stream.
+
+```js
+compare.on('delete', function (obj) {
+    console.log('deleted', obj);
+});
+```
+
+
+### equal
+
+Emitted for objects in the stream which are equal in the array of objects
+compared against.
+
+```js
+compare.on('equal', function (streamObj, compareObj) {
+    console.log('equal', streamObj, compareObj);
 });
 ```
 
