@@ -39,6 +39,6 @@
   "devDependencies": {
     "concat-stream": "1.5.1",
     "eslint": "2.13.1",
-    "tap": "6.1.1"
+    "tap": "6.3.0"
   }
 }
